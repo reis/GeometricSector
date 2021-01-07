@@ -39,14 +39,14 @@ module Hands{
         var center_y = height / 2;
         var screenCenterPoint = [ center_x, center_y ];
         var minuteHandCoordinates =
-            Hands.generateHandCoordinates(screenCenterPoint, minuteHandAngle, center_x, 0, 3);
+            Hands.generateHandCoordinates(screenCenterPoint, minuteHandAngle, center_x, 0, 5);
 
         dc.setPenWidth(1);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteHandCoordinates);
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+        /*dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.drawLine(minuteHandCoordinates[0][0], minuteHandCoordinates[0][1], minuteHandCoordinates[1][0], minuteHandCoordinates[1][1]);
-        /*dc.drawLine(minuteHandCoordinates[1][0], minuteHandCoordinates[1][1], minuteHandCoordinates[2][0], minuteHandCoordinates[2][1]);
+        dc.drawLine(minuteHandCoordinates[1][0], minuteHandCoordinates[1][1], minuteHandCoordinates[2][0], minuteHandCoordinates[2][1]);
         dc.drawLine(minuteHandCoordinates[2][0], minuteHandCoordinates[2][1], minuteHandCoordinates[3][0], minuteHandCoordinates[3][1]);
         dc.drawLine(minuteHandCoordinates[3][0], minuteHandCoordinates[3][1], minuteHandCoordinates[0][0], minuteHandCoordinates[0][1]);*/
     }
@@ -60,7 +60,7 @@ module Hands{
         var screenCenterPoint = [ center_x, center_y ];
 
 
-        var hour_radius =  width/2 * 0.85; 
+        var hour_radius =  width/2 * 0.77; 
         var alpha = Math.PI/6*(1.0*clockTime.hour+clockTime.min/60.0);
         var maxRad = hour_radius;
         var r1 = hour_radius * 0.85;
@@ -77,7 +77,7 @@ module Hands{
         dc.drawCircle(center_x+r2*Math.sin(alpha),center_y-r2*Math.cos(alpha),8);
 
         var hourHandCoordinates =
-            Hands.generateHandCoordinates(screenCenterPoint, alpha, center_x * 0.8, 0, 3);
+            Hands.generateHandCoordinates(screenCenterPoint, alpha, r1, 0, 5);
 
         dc.setPenWidth(1);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);

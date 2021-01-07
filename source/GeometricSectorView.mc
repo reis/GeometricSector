@@ -46,12 +46,11 @@ class GeometricSectorView extends WatchUi.WatchFace {
 
         // Draw the arbor in the center of the screen.
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_WHITE);
-        dc.fillCircle(center_x, center_y, 4);
+        dc.fillCircle(center_x, center_y, 8);
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(center_x, center_y, 3);
+        dc.fillCircle(center_x, center_y, 6);
         dc.setColor(Graphics.COLOR_YELLOW, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(center_x, center_y, 2);
-
+        dc.fillCircle(center_x, center_y, 4);
         
     }
 
