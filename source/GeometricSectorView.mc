@@ -2,6 +2,34 @@ using Toybox.WatchUi;
 using Toybox.Graphics;
 using Toybox.System;
 using Toybox.Lang;
+using Toybox.Time;
+using Toybox.ActivityMonitor as ActMonitor;
+using Toybox.Activity as Act;
+using Toybox.Application as App;
+
+enum {
+  LAT,
+  LON
+}
+
+enum {
+	NIGHT_END,
+	NAUTICAL_DAWN,
+	DAWN,
+	BLUE_HOUR_AM,
+	SUNRISE,
+	SUNRISE_END,
+	GOLDEN_HOUR_AM,
+	NOON,
+	GOLDEN_HOUR_PM,
+	SUNSET_START,
+	SUNSET,
+	BLUE_HOUR_PM,
+	DUSK,
+	NAUTICAL_DUSK,
+	NIGHT,
+	NUM_RESULTS
+}
 
 class GeometricSectorView extends WatchUi.WatchFace {
 
@@ -37,20 +65,52 @@ class GeometricSectorView extends WatchUi.WatchFace {
 
         // Call the parent onUpdate function to redraw the layout
         //View.onUpdate(dc);
-
+        var width = dc.getWidth();
+        var height = dc.getHeight();
 
 
         Sectors.drawDialSector(dc);
-        Hands.drawMinuteHand(dc);
-        Hands.drawHourHand(dc);
 
-        // Draw the arbor in the center of the screen.
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_WHITE);
-        dc.fillCircle(center_x, center_y, 8);
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(center_x, center_y, 6);
-        dc.setColor(Graphics.COLOR_YELLOW, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(center_x, center_y, 4);
+
+
+
+        var gregorianInfo = Time.Gregorian.info(Time.now(), Time.FORMAT_LONG);
+        Fields.drawDay(dc, gregorianInfo);
+        var gregorianShort = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
+        var moonAge = Moon.getmoonage(gregorianShort.day.toNumber(), gregorianShort.month.toNumber(), gregorianShort.year.toNumber());
+        Fields.drawMoonAge(dc, moonAge);
+        var steps = ActMonitor.getInfo().steps;
+        Fields.drawSteps(dc, steps);
+        var battery = (System.getSystemStats().battery + 0.5).toNumber().toString();
+        Fields.drawBattery(dc, battery);
+
+        var loc = Act.getActivityInfo().currentLocation;
+        var lat;
+        var lon;
+        if (loc == null) {
+            lat = App.getApp().getProperty(LAT);
+            lon = App.getApp().getProperty(LON);
+        } else {
+            lat = loc.toDegrees()[0] * Math.PI / 180.0;
+            App.getApp().setProperty(LAT, lat);
+            lon = loc.toDegrees()[1] * Math.PI / 180.0;
+            App.getApp().setProperty(LON, lon);
+        }
+        if (lat == null) {
+            lat = 51.627240 * Math.PI / 180.0;
+        }
+        if (lon == null) {
+            lon = 0.049870 * Math.PI / 180.0;
+        }
+        var now = new Time.Moment(Time.now().value());
+        var oneDay = new Time.Duration(Time.Gregorian.SECONDS_PER_DAY);
+        var sunrise = Sun.getsuntime(now, lat, lon, SUNRISE);
+        var sunset = Sun.getsuntime(now, lat, lon, SUNSET);
+
+        Fields.drawsun(dc, sunrise, Graphics.COLOR_YELLOW);
+        Fields.drawsun(dc, sunset, Graphics.COLOR_RED);
+
+        Hands.drawHands(dc);
         
     }
 

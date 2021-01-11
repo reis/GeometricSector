@@ -1,4 +1,3 @@
-using Toybox.System;
 using Toybox.Graphics;
 using Toybox.Math;
 
@@ -15,7 +14,6 @@ module Sectors {
         var r1 = hour_radius * 0.72;
         var deflec1 = 0.25;
 
-        var clockTime = System.getClockTime();
         var alpha = Math.PI;
         var hand;
         var i;
@@ -51,5 +49,8 @@ module Sectors {
             dc.fillPolygon(hand);
         }
     }
+
+
+
 
 }
